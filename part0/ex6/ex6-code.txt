@@ -1,0 +1,10 @@
+title POST to /spa
+
+note over browser:
+Browser updates local notes array
+Browser redraws notes, adding new note locally
+end note
+
+browser->server: HTTP POST to /new_note_spa: [{content: (content of note), date: (obtained with new Date())}]
+server->server: Update server's note array
+server-->browser: HTTP 201 Created response: [{message: "note created"}]
