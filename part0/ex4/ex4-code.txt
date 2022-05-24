@@ -1,11 +1,11 @@
 title POST
-browser->server: HTTP POST [{note: "yeet"}]
-server->server: Update database
-server-->browser: HTTP 302 Redirect
+browser->server: HTTP POST to /new_note: [{note: (content of note)}]
+server->server: Update notes array with notes.body.note and date
+server-->browser: HTTP 302 Redirect to /notes
 
 note over browser:
-browser goes to redirected page
-which is the same page
+browser goes to redirected page /notes
+browser begins loading page
 end note
 
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main
