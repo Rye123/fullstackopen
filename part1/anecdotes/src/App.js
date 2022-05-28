@@ -10,10 +10,11 @@ const Button = ({text, onClick}) => {
   );
 }
 
-const AnecdoteDisplay = ({anecdoteId, anecdotesArray}) => {
+const AnecdoteDisplay = ({anecdoteId, anecVotesArray, anecdotesArray}) => {
   return (
-    <div style={{minHeight: "3em"}} >
-      {anecdotesArray[anecdoteId]}
+    <div>
+      <div style={{minHeight: "3em"}} >{anecdotesArray[anecdoteId]}</div>
+      <div>has {anecVotesArray[anecdoteId]} votes</div>
     </div>
   )
 }
@@ -30,12 +31,23 @@ const App = () => {
   ];
    
   const [selectedAnecId, setSelectedAnecId] = useState(0);
+  const [anecVotes, setAnecVotes] = useState(Array(anecdotes.length).fill(0)); // haha geddit anecdotes -> anecVOTES im hilarious i know
 
+  const voteButtonClicked = () => () => {
+    let anecVotesArrayCopy = [...anecVotes];
+    anecVotesArrayCopy[selectedAnecId] += 1;
+    setAnecVotes(anecVotesArrayCopy);
+  };
   return (
     <div>
       <AnecdoteDisplay 
         anecdoteId={selectedAnecId} 
+        anecVotesArray={anecVotes}
         anecdotesArray={anecdotes}
+      />
+      <Button
+        text="vote"
+        onClick={voteButtonClicked()}
       />
       <Button 
         text="next anecdote"
