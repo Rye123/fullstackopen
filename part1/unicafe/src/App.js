@@ -16,6 +16,12 @@ const Feedback = ({addToGoodCount, addToNeutralCount, addToBadCount}) => {
   )
 }
 
+const StatisticLine = ({text, value}) => {
+  return (
+    <div>{text} {value}</div>
+  )
+}
+
 const Statistics = ({goodCount, neutralCount, badCount}) => {
   let sumCount = goodCount + neutralCount + badCount;
   if (sumCount > 0) {
@@ -23,12 +29,12 @@ const Statistics = ({goodCount, neutralCount, badCount}) => {
     let posPercent = (goodCount/sumCount)*100;
     return (
       <div>
-        <div>good {goodCount}</div>
-        <div>neutral {neutralCount}</div>
-        <div>bad {badCount}</div>
-        <div>all {sumCount}</div>
-        <div>average {avgScore}</div>
-        <div>positive {posPercent}%</div>
+        <StatisticLine text="good" value={goodCount} />
+        <StatisticLine text="neutral" value={neutralCount} />
+        <StatisticLine text="bad" value={badCount} />
+        <StatisticLine text="all" value={sumCount} />
+        <StatisticLine text="average" value={avgScore} />
+        <StatisticLine text="positive" value={posPercent} />
       </div>
     )
   }
