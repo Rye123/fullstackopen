@@ -10,11 +10,12 @@ const Button = ({text, onClick}) => {
   );
 }
 
-const AnecdoteDisplay = ({anecdoteId, anecVotesArray, anecdotesArray}) => {
+const AnecdoteDisplay = ({anecdoteText, anecdoteVotes}) => {
+  // displays an anecdote and its votes
   return (
     <div>
-      <div style={{minHeight: "3em"}} >{anecdotesArray[anecdoteId]}</div>
-      <div>has {anecVotesArray[anecdoteId]} votes</div>
+      <div>{anecdoteText}</div>
+      <div>has {anecdoteVotes} votes</div>
     </div>
   )
 }
@@ -38,12 +39,20 @@ const App = () => {
     anecVotesArrayCopy[selectedAnecId] += 1;
     setAnecVotes(anecVotesArrayCopy);
   };
+
+  // get the anecdote(s) with the most votes (since there can be multiple), and randomly select one of them
+  const highestVotes = Math.max(...anecVotes);
+  const mostVotedAnecdotes = anecdotes.filter((anecdote, i) => {
+    return anecVotes[i] === highestVotes;
+  })
+  const selectedMostVotedAnecdoteId = getRandomInRange(0, mostVotedAnecdotes.length)
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <AnecdoteDisplay 
-        anecdoteId={selectedAnecId} 
-        anecVotesArray={anecVotes}
-        anecdotesArray={anecdotes}
+        anecdoteText = {anecdotes[selectedAnecId]}
+        anecdoteVotes = {anecVotes[selectedAnecId]}
       />
       <Button
         text="vote"
@@ -52,6 +61,12 @@ const App = () => {
       <Button 
         text="next anecdote"
         onClick={() => {setSelectedAnecId(getRandomInRange(0, anecdotes.length))}}
+      />
+
+      <h1>Anecdote with most votes</h1>
+      <AnecdoteDisplay 
+        anecdoteText = {mostVotedAnecdotes[selectedMostVotedAnecdoteId]}
+        anecdoteVotes = {highestVotes}
       />
     </div>
   );
