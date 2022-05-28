@@ -18,16 +18,23 @@ const Feedback = ({addToGoodCount, addToNeutralCount, addToBadCount}) => {
 
 const Statistics = ({goodCount, neutralCount, badCount}) => {
   let sumCount = goodCount + neutralCount + badCount;
-  let avgScore = (sumCount === 0) ? 0 : (goodCount - badCount)/sumCount;
-  let posPercent = (sumCount === 0) ? 0 : (goodCount/sumCount)*100;
+  if (sumCount > 0) {
+    let avgScore = (goodCount - badCount)/sumCount;
+    let posPercent = (goodCount/sumCount)*100;
+    return (
+      <div>
+        <div>good {goodCount}</div>
+        <div>neutral {neutralCount}</div>
+        <div>bad {badCount}</div>
+        <div>all {sumCount}</div>
+        <div>average {avgScore}</div>
+        <div>positive {posPercent}%</div>
+      </div>
+    )
+  }
   return (
     <div>
-      <div>good {goodCount}</div>
-      <div>neutral {neutralCount}</div>
-      <div>bad {badCount}</div>
-      <div>all {sumCount}</div>
-      <div>average {avgScore}</div>
-      <div>positive {posPercent}%</div>
+      No feedback given.
     </div>
   )
 }
@@ -40,11 +47,13 @@ const App = () => {
 
   return (
     <div>
+      <h1>give feedback</h1>
       <Feedback 
         addToGoodCount={() => {setGoodCount(goodCount + 1)}}
         addToNeutralCount={() => {setNeutralCount(neutralCount + 1)}}
         addToBadCount={() => {setBadCount(badCount + 1)}}
       />
+      <h1>statistics</h1>
       <Statistics 
         goodCount={goodCount} 
         neutralCount={neutralCount} 
