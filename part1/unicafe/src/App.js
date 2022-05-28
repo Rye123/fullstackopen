@@ -17,11 +17,17 @@ const Feedback = ({addToGoodCount, addToNeutralCount, addToBadCount}) => {
 }
 
 const Statistics = ({goodCount, neutralCount, badCount}) => {
+  let sumCount = goodCount + neutralCount + badCount;
+  let avgScore = (sumCount === 0) ? 0 : (goodCount - badCount)/sumCount;
+  let posPercent = (sumCount === 0) ? 0 : (goodCount/sumCount)*100;
   return (
     <div>
       <div>good {goodCount}</div>
       <div>neutral {neutralCount}</div>
       <div>bad {badCount}</div>
+      <div>all {sumCount}</div>
+      <div>average {avgScore}</div>
+      <div>positive {posPercent}%</div>
     </div>
   )
 }
