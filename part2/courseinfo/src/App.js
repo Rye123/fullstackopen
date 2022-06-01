@@ -25,13 +25,13 @@ const Content = ({parts}) => {
 
 const Total = ({parts}) => {
   return (
-    <p>Number of exercises {parts.map(part => {
+    <b>total of {parts.map(part => {
       // extract exercises
       return parseInt(part.exercises);
     }).reduce((p, c) => {
       // get sum
       return p + c;
-    }, 0)}</p>
+    }, 0)} exercises</b>
   )
 }
 
@@ -65,6 +65,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
