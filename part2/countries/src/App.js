@@ -1,4 +1,5 @@
 //import axios from 'axios';
+import {useState} from 'react';
 
 const CountryList = ({countries}) => {
   // Displays info of a list of countries
@@ -11,7 +12,7 @@ const CountryList = ({countries}) => {
       <>
       {
         countries.map(country => {
-          return <div>{country.name.common}</div>
+          return <div key={country.name.common}>{country.name.common}</div>
         })
       }
       </>
@@ -51,7 +52,8 @@ const Display = ({countries}) => {
 }
 
 const App = () => {
-  const countries = [
+  const [countrySearchText, setCountrySearchText] = useState("");
+  const allCountries = [
     {
       name: {
         common: "Country A",
@@ -82,10 +84,33 @@ const App = () => {
       }
     }
   ];
+
+  const [countries, setCountries] = useState([]);
+
+  // Event Handlers
+  const countrySearchTextChanged = (event) => {
+    setCountrySearchText(event.target.value);
+    let searchText = event.target.value.toLowerCase();
+    if (searchText.length === 0) {
+      setCountries([])
+    } else {
+      setCountries(
+        allCountries.filter(country => {
+          return (country.name.common.toLowerCase().includes(searchText))
+        })
+      )
+    }
+  }
+
+  // Render
   return (
     <div>
       find countries 
-      <input type='text' />
+      <input 
+        type='text'
+        value={countrySearchText}
+        onChange={countrySearchTextChanged}
+      />
       <Display countries={countries} />
     </div>
   );
