@@ -1,5 +1,5 @@
-//import axios from 'axios';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
 const CountryList = ({countries}) => {
   // Displays info of a list of countries
@@ -25,8 +25,8 @@ const CountryInfo = ({country}) => {
   return (
     <>
       <h1>{country.name.official}</h1>
-      <div>capital {country.capital[0]}</div>
-      <div>area {country.area}</div>
+      <div><b>capital</b> {country.capital[0]}</div>
+      <div><b>area</b> {country.area}</div>
       <h2>languages:</h2>
       <ul>
       {
@@ -35,7 +35,7 @@ const CountryInfo = ({country}) => {
         })
       }
       </ul>
-      <img src={country.flags.svg} width="300" alt={`Flag of ${country.name.official}`}/>
+      <img src={country.flags.svg} width="300" alt={`Flag of ${country.name.official}`} style={{border: "1px solid black"}}/>
     </>
   )
 }
@@ -53,37 +53,16 @@ const Display = ({countries}) => {
 
 const App = () => {
   const [countrySearchText, setCountrySearchText] = useState("");
-  const allCountries = [
-    {
-      name: {
-        common: "Country A",
-        official: "Republic of A"
-      },
-      capital: ["Capital of A"],
-      area: 5,
-      flags: {
-        svg: "https://flagcdn.com/do.svg"
-      },
-      languages: {
-        alang: "Language A"
-      }
-    },
-    {
-      name: {
-        common: "Country B",
-        official: "Republic of B"
-      },
-      capital: ["Capital of B"],
-      area: 6,
-      flags: {
-        svg: "https://flagcdn.com/do.svg"
-      },
-      languages: {
-        alang: "Language A",
-        blang: "Language B",
-      }
-    }
-  ];
+  const [allCountries, setAllCountries] = useState([]);
+
+  useEffect( () => {
+    axios
+    .get("https://restcountries.com/v3.1/all")
+    .then(response => {
+      console.log("Request to API completed.");
+      setAllCountries(response.data)
+    })
+  }, []);
 
   const [countries, setCountries] = useState([]);
 
@@ -96,7 +75,7 @@ const App = () => {
     } else {
       setCountries(
         allCountries.filter(country => {
-          return (country.name.common.toLowerCase().includes(searchText))
+          return (country.name.common.toLowerCase().includes(searchText) || country.name.official.toLowerCase().includes(searchText));
         })
       )
     }
