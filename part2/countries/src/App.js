@@ -14,6 +14,9 @@ const App = () => {
         console.log("Request to API completed.");
         setAllCountries(response.data)
       })
+      .catch(error => {
+          console.error(error);
+      })
   }, []);
 
   const [countries, setCountries] = useState([]);

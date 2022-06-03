@@ -1,5 +1,23 @@
 import React from 'react';
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+const openweather_key = process.env.REACT_APP_OPENWEATHER_KEY;
+
+async function getWeatherData(capital) {
+    return axios
+        .get(`http://api.openweathermap.org/geo/1.0/direct?q=${capital}&limit=1&appid=${openweather_key}`)
+        .then(response => {
+            // make second call to get country data
+            return axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${response.data[0].lat}&lon=${response.data[0].lon}&appid=${openweather_key}&units=metric`);
+        })
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error(error);
+        })
+}
 
 const CountryList = ({ countries }) => {
     // Displays info of a list of countries
@@ -43,6 +61,36 @@ const CountryList = ({ countries }) => {
     }
 }
 
+const WeatherReport = ({ country }) => {
+    const [weatherData, setWeatherData] = useState(null);
+    useEffect( () => {
+        setWeatherData(null);
+        getWeatherData(country.capital[0])
+            .then(response => {
+                console.log("Updated weather data:", country.name.common);
+                setWeatherData(response);
+            });
+    }, [country])
+    if (weatherData === null) {
+        return (
+            <div>Weather data loading...</div>
+        )
+    } else {
+        return (
+            <div>
+                <div><b>temperature</b> {weatherData.main.temp} Celsius</div>
+                <img 
+                    src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} 
+                    width="150" 
+                    alt={weatherData.weather[0].main} 
+                    style={{border: "1px solid black"}} 
+                />
+                <div><b>wind</b> {weatherData.wind.speed} m/s</div>
+            </div>
+        )
+    }
+}
+
 const CountryInfo = ({ country }) => {
     // Displays info of a single country
     return (
@@ -59,6 +107,7 @@ const CountryInfo = ({ country }) => {
                 }
             </ul>
             <img src={country.flags.svg} width="300" alt={`Flag of ${country.name.official}`} style={{ border: "1px solid black" }} />
+            <WeatherReport country={country} />
         </>
     )
 }
