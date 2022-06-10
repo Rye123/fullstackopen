@@ -72,13 +72,33 @@ const App = () => {
       name: formContents.name,
       number: formContents.number
     }
-    handler.db_create(newPerson)
-      .then(createdPerson => {
-        setPersons(persons.concat(createdPerson));
-      })
-      .catch(error => {
-        console.log("db_create Error: ", error);
-      });
+
+    // check if person's name already exists
+    const person = persons.find(person => (person.name === newPerson.name));
+    if (person) {
+      // person exists
+      if ( window.confirm(`${person.name} already exists. Replace phone number?`) ) {
+        const updatedPerson = {
+          ...person,
+          number: newPerson.number
+        };
+        handler.db_update(person.id, updatedPerson)
+          .then(updatedPerson => {
+            setPersons( persons.map(person => (person.id === updatedPerson.id) ? updatedPerson : person) );
+          })
+          .catch(error => {
+            console.log("db_update Error: ", error);
+          })
+      }
+    } else {
+      handler.db_create(newPerson)
+        .then(createdPerson => {
+          setPersons(persons.concat(createdPerson));
+        })
+        .catch(error => {
+          console.log("db_create Error: ", error);
+        });
+    }
   }
 
   const deleteEntry = (id) => {
