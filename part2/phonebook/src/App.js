@@ -4,8 +4,8 @@ import axios from 'axios';
 import Entry from './components/Entry';
 
 const PhonebookForm = ({handlePhonebookFormSubmission}) => {
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
+  const [nameVal, setNameVal] = useState("");
+  const [numVal, setNumVal] = useState("");
 
   return (
     <>
@@ -14,13 +14,13 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
         (e) => {
           e.preventDefault();
           const formContents = {
-            name: newName,
-            number: newNumber
+            name: nameVal,
+            number: numVal
           };
 
           // reset form inputs
-          setNewName("");
-          setNewNumber("");
+          setNameVal("");
+          setNumVal("");
 
           // submit form
           handlePhonebookFormSubmission(formContents); 
@@ -30,15 +30,15 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
           <div>
             name: 
             <input 
-              value={newName}
-              onChange={(event) => setNewName(event.target.value)}
+              value={nameVal}
+              onChange={(event) => setNameVal(event.target.value)}
             />
           </div>
           <div>
             number: 
             <input 
-              value={newNumber}
-              onChange={(event) => setNewNumber(event.target.value)}
+              value={numVal}
+              onChange={(event) => setNumVal(event.target.value)}
             />
           </div>
           
