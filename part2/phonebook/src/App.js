@@ -5,6 +5,7 @@ import Entry from './components/Entry';
 
 const PhonebookForm = ({handlePhonebookFormSubmission}) => {
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   return (
     <>
@@ -13,18 +14,35 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
         (e) => {
           e.preventDefault();
           const formContents = {
-            name: newName
+            name: newName,
+            number: newNumber
           };
+
+          // reset form inputs
           setNewName("");
+          setNewNumber("");
+
+          // submit form
           handlePhonebookFormSubmission(formContents); 
         }
       }>
         <div>
-          name: 
-          <input 
-            value={newName}
-            onChange={(event) => setNewName(event.target.value)}
-          />
+          <div>
+            name: 
+            <input 
+              value={newName}
+              onChange={(event) => setNewName(event.target.value)}
+            />
+          </div>
+          <div>
+            number: 
+            <input 
+              value={newNumber}
+              onChange={(event) => setNewNumber(event.target.value)}
+            />
+          </div>
+          
+
         </div>
         <div>
           <button type="submit">add</button>
@@ -51,7 +69,8 @@ const App = () => {
   // EVENTS
   const handleAddToPhonebook = (formContents) => {
     const newPerson = {
-      name: formContents.name
+      name: formContents.name,
+      number: formContents.number
     }
     axios
       .post("http://localhost:3001/persons", newPerson)
