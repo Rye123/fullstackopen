@@ -53,7 +53,11 @@ const App = () => {
     const newPerson = {
       name: formContents.name
     }
-    setPersons(persons.concat(newPerson));
+    axios
+      .post("http://localhost:3001/persons", newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+      });
   }
   
   // fetch initial state
