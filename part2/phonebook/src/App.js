@@ -4,12 +4,12 @@ import axios from 'axios';
 import Entry from './components/Entry';
 
 const PhonebookForm = ({handlePhonebookFormSubmission}) => {
-  const [newName, setNewName] = useState('');
+  const [newName, setNewName] = useState("");
 
   return (
     <>
       <h2>Phonebook</h2>
-      <form onSubmit={handlePhonebookFormSubmission}>
+      <form onSubmit={(e) => {handlePhonebookFormSubmission(e); setNewName("")}}>
         <div>
           name: 
           <input 
@@ -30,7 +30,7 @@ const PhonebookListing = ({persons}) => {
     <>
       <h2>Numbers</h2>
       {persons.map(person => {
-        return <Entry key={person.name} person={person} />
+        return <Entry key={person.id} person={person} />
       })}
     </>
   )
@@ -45,7 +45,7 @@ const App = () => {
     const newPerson = {
       name: event.target[0].value
     }
-    setPersons(persons.concat(newPerson))
+    setPersons(persons.concat(newPerson));
   }
   
   // fetch initial state
