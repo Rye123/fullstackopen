@@ -9,7 +9,16 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
   return (
     <>
       <h2>Phonebook</h2>
-      <form onSubmit={(e) => {handlePhonebookFormSubmission(e); setNewName("")}}>
+      <form onSubmit={
+        (e) => {
+          e.preventDefault();
+          const formContents = {
+            name: newName
+          };
+          setNewName("");
+          handlePhonebookFormSubmission(formContents); 
+        }
+      }>
         <div>
           name: 
           <input 
@@ -40,10 +49,9 @@ const App = () => {
   const [persons, setPersons] = useState([]) ;
 
   // EVENTS
-  const handleAddToPhonebook = (event) => {
-    event.preventDefault();
+  const handleAddToPhonebook = (formContents) => {
     const newPerson = {
-      name: event.target[0].value
+      name: formContents.name
     }
     setPersons(persons.concat(newPerson));
   }
