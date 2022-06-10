@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
-import axios from 'axios';
 
 import Entry from './components/Entry';
+import handler from './services/phonebook_handler';
 
 const PhonebookForm = ({handlePhonebookFormSubmission}) => {
   const [nameVal, setNameVal] = useState("");
@@ -72,20 +72,24 @@ const App = () => {
       name: formContents.name,
       number: formContents.number
     }
-    axios
-      .post("http://localhost:3001/persons", newPerson)
-      .then(response => {
-        setPersons(persons.concat(response.data));
+    handler.db_create(newPerson)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson));
+      })
+      .catch(error => {
+        console.log("db_create Error: ", error);
       });
   }
   
   // fetch initial state
   useEffect(() => {
-    axios
-    .get("http://localhost:3001/persons")
-    .then(response => {
-      setPersons(response.data);
-    })
+    handler.db_readAll()
+      .then(records => {
+        setPersons(records);
+      })
+      .catch(error => {
+        console.log("db_readAll Error: ", error);
+      });
   }, []);
 
   return (
