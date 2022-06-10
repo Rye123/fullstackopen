@@ -52,12 +52,12 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
   )
 }
 
-const PhonebookListing = ({persons}) => {
+const PhonebookListing = ({deleteEntry, persons}) => {
   return (
     <>
       <h2>Numbers</h2>
       {persons.map(person => {
-        return <Entry key={person.id} person={person} />
+        return <Entry key={person.id} person={person} deleteEntry={() => deleteEntry(person.id)}/>
       })}
     </>
   )
@@ -80,6 +80,20 @@ const App = () => {
         console.log("db_create Error: ", error);
       });
   }
+
+  const deleteEntry = (id) => {
+    const personToDelete = persons.filter(person => person.id === id)[0]
+    if ( window.confirm(`Delete ${personToDelete.name}?`) ) {
+      handler.db_delete(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+        .catch(error => {
+          console.log("Error with deletion: ", error);
+          setPersons(persons.filter(person => person.id !== id));
+        })
+    }
+  }
   
   // fetch initial state
   useEffect(() => {
@@ -95,7 +109,10 @@ const App = () => {
   return (
     <div>
       <PhonebookForm handlePhonebookFormSubmission={handleAddToPhonebook}/>
-      <PhonebookListing persons={persons}/>
+      <PhonebookListing 
+        persons={persons}
+        deleteEntry={deleteEntry}
+      />
     </div>
   )
 };
