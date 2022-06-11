@@ -103,7 +103,7 @@ const App = () => {
         })
         .catch(error => {
           console.log("db_create Error: ", error);
-          newNotification(`Sorry, there was a problem creating an entry for ${newPerson.name}.`, "error", 3);
+          newNotification(`Sorry, there was a problem creating an entry for ${newPerson.name}. `, "error", 3);
         });
     }
   }
@@ -119,7 +119,7 @@ const App = () => {
         .catch(error => {
           console.log("Error with deletion: ", error);
           setPersons(persons.filter(person => person.id !== id));
-          newNotification(`Sorry, there was a problem deleting the entry for ${personToDelete.name}. `, "error", 3);
+          newNotification(`Information for ${personToDelete.name} already removed. `, "error", 3);
         })
     }
   }
