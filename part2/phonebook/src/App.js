@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 
 import Entry from './components/Entry';
 import handler from './services/phonebook_handler';
+import Notification from './components/Notification';
 
 const PhonebookForm = ({handlePhonebookFormSubmission}) => {
   const [nameVal, setNameVal] = useState("");
@@ -130,6 +131,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message="Hello world" type="default"/>
       <div>
         filter shown with <input value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
       </div>
