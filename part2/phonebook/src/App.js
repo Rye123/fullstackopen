@@ -9,7 +9,7 @@ const PhonebookForm = ({handlePhonebookFormSubmission}) => {
 
   return (
     <>
-      <h2>Phonebook</h2>
+      <h2>Add New Entry</h2>
       <form onSubmit={
         (e) => {
           e.preventDefault();
@@ -65,6 +65,7 @@ const PhonebookListing = ({deleteEntry, persons}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([]) ;
+  const [nameFilter, setNameFilter] = useState("");
 
   // EVENTS
   const handleAddToPhonebook = (formContents) => {
@@ -128,9 +129,13 @@ const App = () => {
 
   return (
     <div>
+      <h1>Phonebook</h1>
+      <div>
+        filter shown with <input value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
+      </div>
       <PhonebookForm handlePhonebookFormSubmission={handleAddToPhonebook}/>
       <PhonebookListing 
-        persons={persons}
+        persons={(nameFilter === "") ? persons : persons.filter(person => person.name.toLowerCase().includes(nameFilter.toLowerCase()))}
         deleteEntry={deleteEntry}
       />
     </div>
