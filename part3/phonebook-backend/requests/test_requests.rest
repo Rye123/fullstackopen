@@ -30,6 +30,14 @@ Content-Type: application/json
     "malicious": "malicious thing"
 }
 
+### POST partially complete person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Lisa Potato"
+}
+
 ### POST empty person
 POST http://localhost:3001/api/persons
 Content-Type: application/json
