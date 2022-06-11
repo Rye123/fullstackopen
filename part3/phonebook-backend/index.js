@@ -35,7 +35,7 @@ app.get('/', (request, response) => {
     response.send("<h1>Phonebook API</h1>")
 });
 
-app. get('/info', (request, response) => {
+app.get('/info', (request, response) => {
     const html = `
         <div>
             Phonebook has info for ${persons.length} people.
@@ -59,7 +59,7 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end();
     }
-})
+});
 
 // LISTENING
 app.listen(PORT, () => {
