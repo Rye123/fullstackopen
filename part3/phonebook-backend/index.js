@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 
 const PORT = 3001;
 const ID_MAX = Math.pow(2, 53);
@@ -39,6 +40,9 @@ const generateId = () => {
 
 // for JSON POST requests
 app.use(express.json());
+
+// logging
+app.use(morgan('tiny'));
 
 // REQUEST HANDLING
 app.get('/', (request, response) => {
