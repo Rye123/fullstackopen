@@ -67,6 +67,7 @@ const PhonebookListing = ({deleteEntry, persons}) => {
 const App = () => {
   const [persons, setPersons] = useState([]) ;
   const [nameFilter, setNameFilter] = useState("");
+  const [notification, setNotification] = useState({message: null, type: null});
 
   // EVENTS
   const handleAddToPhonebook = (formContents) => {
@@ -87,18 +88,22 @@ const App = () => {
         handler.db_update(person.id, updatedPerson)
           .then(updatedPerson => {
             setPersons( persons.map(person => (person.id === updatedPerson.id) ? updatedPerson : person) );
+            newNotification(`Entry for ${updatedPerson.name} updated!`, "default", 3);
           })
           .catch(error => {
             console.log("db_update Error: ", error);
+            newNotification(`Sorry, there was a problem updating the entry for ${updatedPerson.name}.`, "error", 3);
           })
       }
     } else {
       handler.db_create(newPerson)
         .then(createdPerson => {
           setPersons(persons.concat(createdPerson));
+          newNotification(`Entry for ${createdPerson.name} added!`, "default", 3);
         })
         .catch(error => {
           console.log("db_create Error: ", error);
+          newNotification(`Sorry, there was a problem creating an entry for ${newPerson.name}.`, "error", 3);
         });
     }
   }
@@ -109,13 +114,29 @@ const App = () => {
       handler.db_delete(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
+          newNotification(`Entry for ${personToDelete.name} deleted!`, "default", 3);
         })
         .catch(error => {
           console.log("Error with deletion: ", error);
           setPersons(persons.filter(person => person.id !== id));
+          newNotification(`Sorry, there was a problem deleting the entry for ${personToDelete.name}. `, "error", 3);
         })
     }
   }
+
+  // NOTIFICATION HANDLING
+  const newNotification = (message, type, seconds_to_display) => {
+    setNotification({
+      message: message,
+      type: type
+    });
+    setTimeout(() => {
+      setNotification({
+        message: null,
+        type: null
+      })
+    }, seconds_to_display*1000);
+  };
   
   // fetch initial state
   useEffect(() => {
@@ -131,7 +152,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message="Hello world" type="default"/>
+      <Notification message={notification.message} type={notification.type}/>
       <div>
         filter shown with <input value={nameFilter} onChange={(e) => setNameFilter(e.target.value)} />
       </div>
