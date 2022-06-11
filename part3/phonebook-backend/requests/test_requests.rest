@@ -13,7 +13,7 @@ DELETE http://localhost:3001/api/persons/1
 ### DELETE invalid person
 DELETE http://localhost:3001/api/persons/1000
 
-### ADD person
+### POST person
 POST http://localhost:3001/api/persons
 
 {
@@ -21,16 +21,16 @@ POST http://localhost:3001/api/persons
     "number": "34-21-432542"
 }
 
-### ADD invalid person
+### POST invalid person
 POST http://localhost:3001/api/persons
 
 {
     "malicious": "malicious thing"
 }
 
-### ADD empty person
+### POST empty person
 POST http://localhost:3001/api/persons
 
 {
-    
+
 }
