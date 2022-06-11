@@ -35,6 +35,18 @@ app.get('/', (request, response) => {
     response.send("<h1>Phonebook API</h1>")
 });
 
+app. get('/info', (request, response) => {
+    const html = `
+        <div>
+            Phonebook has info for ${persons.length} people.
+        </div>
+        <div>
+            ${new Date()}
+        </div> 
+    `;
+    response.send(html);
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons);
 })
