@@ -35,6 +35,15 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
+    "name": "Arto Hellas",
+    "number": "1232152"
+}
+
+### POST existing person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
     "name": "Lisa Potato"
 }
 
