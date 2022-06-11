@@ -42,7 +42,28 @@ const generateId = () => {
 app.use(express.json());
 
 // logging
-app.use(morgan('tiny'));
+/* Token to show body of POST requests */
+morgan.token('body', (request) => {
+    return JSON.stringify(request.body);
+});
+/* Middleware if POST request */
+app.use(
+    morgan(
+        ':method :url :status :res[content-length] - :response-time ms :body', 
+        {
+            skip: (request, response) => request.method !== "POST"
+        }
+    )
+);
+/* Middle ware if not POST request */
+app.use(
+    morgan(
+        'tiny',
+        {
+            skip: (request, response) => request.method === "POST"
+        }
+    )
+);
 
 // REQUEST HANDLING
 app.get('/', (request, response) => {
