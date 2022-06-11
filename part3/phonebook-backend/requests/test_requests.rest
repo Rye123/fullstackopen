@@ -1,0 +1,8 @@
+### GET all persons
+GET http://localhost:3001/api/persons
+
+### GET single person
+GET http://localhost:3001/api/persons/1
+
+### GET invalid person
+GET http://localhost:3001/api/persons/1000
