@@ -38,6 +38,9 @@ const generateId = () => {
     return id;
 }
 
+// for frontend
+app.use(express.static('build'));
+
 // for JSON POST requests
 app.use(express.json());
 
