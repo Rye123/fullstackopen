@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors')
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const ID_MAX = Math.pow(2, 53);
 const app = express();
 
@@ -37,6 +38,9 @@ const generateId = () => {
         id = Math.floor(Math.random() * ID_MAX);
     return id;
 }
+
+// for CORS
+app.use(cors())
 
 // for JSON POST requests
 app.use(express.json());
