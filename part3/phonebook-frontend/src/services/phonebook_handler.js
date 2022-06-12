@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const dbUrl = "http://localhost:3001/api/persons";
+const dbUrl = "./api/persons";
 
 const db_create = (newPerson) => {
     return axios.post(dbUrl, newPerson).then(response => response.data);
