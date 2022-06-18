@@ -100,6 +100,28 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error));
 });
 
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body;
+
+    if (!body.name || !body.number) { // invalid request
+        return response.status(400).json({
+            error: 'invalid entry: missing information'
+        });
+    }
+
+    const newEntry = {
+        name: body.name,
+        number: body.number
+    };
+
+    PhonebookEntry.findByIdAndUpdate(request.params.id, newEntry, {new: true})
+        .then(updatedEntry => {
+            response.json(updatedEntry);
+        })
+        .catch(error => next(error));
+
+})
+
 // 404 Handling
 app.use((request, response) => {
     response.status(404).end();
@@ -112,7 +134,6 @@ app.use((error, request, response, next) => {
     if (error.name == "CastError") {
         return response.status(400).send({ error: 'malformed id' });
     }
-
 
     return response.status(400).end();
 })

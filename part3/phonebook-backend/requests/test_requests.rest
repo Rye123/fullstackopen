@@ -8,7 +8,7 @@ GET http://localhost:3001/api/persons/62a9da4297e40c32af1e909e
 GET http://localhost:3001/api/persons/1000
 
 ### DELETE single person
-DELETE http://localhost:3001/api/persons/62adb0c79fde3013ae777a23
+DELETE http://localhost:3001/api/persons/62adb27ab1089cf3fb7a4724
 
 ### DELETE invalid person
 DELETE http://localhost:3001/api/persons/1000
@@ -39,18 +39,28 @@ Content-Type: application/json
     "number": ""
 }
 
-### POST existing person
-POST http://localhost:3001/api/persons
-Content-Type: application/json
-
-{
-    "name": "Lisa Potato"
-}
-
 ### POST empty person
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
 
+}
+
+### PUT existing person
+PUT http://localhost:3001/api/persons/62ad9ee62dfb39601fe5ce24
+Content-Type: application/json
+
+{
+    "name": "Lisa Potato",
+    "number": "22-34-321324"
+}
+
+### PUT nonexistent person
+PUT http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "I am someone who does not exist",
+    "number": "1337"
 }
