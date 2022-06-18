@@ -2,7 +2,7 @@
 GET http://localhost:3001/api/persons
 
 ### GET single person
-GET http://localhost:3001/api/persons/1
+GET http://localhost:3001/api/persons/62a9da4297e40c32af1e909e
 
 ### GET invalid person
 GET http://localhost:3001/api/persons/1000
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
     "name": "Arto Hellas",
-    "number": "1232152"
+    "number": ""
 }
 
 ### POST existing person

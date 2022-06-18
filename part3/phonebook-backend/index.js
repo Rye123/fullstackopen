@@ -1,42 +1,47 @@
+require('dotenv').config();
+
 const express = require('express');
 const morgan = require('morgan');
+
+// MongoDB
+const PhonebookEntry = require('./models/PhonebookEntry');
 
 const PORT = process.env.PORT || 3001;
 const ID_MAX = Math.pow(2, 53);
 const app = express();
 
 // hardcoded database
-let ids = [1, 2, 3, 4]; // ids to avoid clash
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-];
+// let ids = [1, 2, 3, 4]; // ids to avoid clash
+// let persons = [
+//     { 
+//       "id": 1,
+//       "name": "Arto Hellas", 
+//       "number": "040-123456"
+//     },
+//     { 
+//       "id": 2,
+//       "name": "Ada Lovelace", 
+//       "number": "39-44-5323523"
+//     },
+//     { 
+//       "id": 3,
+//       "name": "Dan Abramov", 
+//       "number": "12-43-234345"
+//     },
+//     { 
+//       "id": 4,
+//       "name": "Mary Poppendieck", 
+//       "number": "39-23-6423122"
+//     }
+// ];
 
 // id generation
-const generateId = () => {
+/*const generateId = () => {
     let id = Math.floor(Math.random() * ID_MAX);
     while (ids.includes(id))
         id = Math.floor(Math.random() * ID_MAX);
     return id;
-}
+}*/
 
 // for frontend
 app.use(express.static('build'));
@@ -86,17 +91,20 @@ app.get('/info', (request, response) => {
 });
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+    PhonebookEntry.find({}).then(result => {
+        response.json(result);
+    });
 });
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = persons.find(person => (person.id === id));
-    if (person) {
-        response.json(person);
-    } else {
+    const id = request.params.id;
+    PhonebookEntry.findById(id).then(result => {
+        response.json(result);
+    })
+    .catch(error => {
+        console.log(`GET Error ${id}: `, error);
         response.status(404).end();
-    }
+    });
 });
 
 app.delete('/api/persons/:id', (request, response) => {
