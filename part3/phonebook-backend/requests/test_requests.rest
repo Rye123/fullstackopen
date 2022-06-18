@@ -8,7 +8,7 @@ GET http://localhost:3001/api/persons/62a9da4297e40c32af1e909e
 GET http://localhost:3001/api/persons/1000
 
 ### DELETE single person
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:3001/api/persons/62adb0c79fde3013ae777a23
 
 ### DELETE invalid person
 DELETE http://localhost:3001/api/persons/1000
@@ -18,8 +18,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Lisa Potato",
-    "number": "34-21-432542"
+    "name": "Delete Me",
+    "number": "3214-2134-22"
 }
 
 ### POST invalid person

@@ -40,7 +40,7 @@ app.use(
     )
 );
 
-// REQUEST HANDLING
+// API information
 app.get('/', (request, response) => {
     response.send("<h1>Phonebook API</h1>")
 });
@@ -57,31 +57,29 @@ app.get('/info', (request, response) => {
     response.send(html);
 });
 
+
+// Request Routing
 app.get('/api/persons', (request, response) => {
     PhonebookEntry.find({}).then(result => {
         response.json(result);
     });
 });
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    PhonebookEntry.findById(id).then(result => {
+app.get('/api/persons/:id', (request, response, next) => {
+    PhonebookEntry.findById(request.params.id).then(result => {
         response.json(result);
     })
-    .catch(error => {
-        console.log(`GET Error ${id}: `, error);
-        response.status(404).end();
-    });
+    .catch(error => next(error));
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    persons = persons.filter(person => (person.id) !== id);
-
-    response.status(204).end();
+app.delete('/api/persons/:id', (request, response, next) => {
+    PhonebookEntry.findByIdAndDelete(request.params.id).then(result => {
+        response.status(204).end()
+    })
+    .catch(error => next(error));
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body;
 
     if (!body.name || !body.number) { // invalid request
@@ -98,22 +96,21 @@ app.post('/api/persons', (request, response) => {
     newPhonebookEntry.save().then(savedEntry => {
         console.log(`New entry saved to DB: ${JSON.stringify(newPhonebookEntry)}`);
         response.json(savedEntry);
-    });
-
-    // if (persons.find(person => person.name === body.name)) { // person exists
-    //     return response.status(400).json({
-    //         error: 'name must be unique'
-    //     })
-    // }
-
-    // const person = {
-    //     name: body.name,
-    //     number: body.number,
-    //     id: generateId()
-    // }
-    // persons = persons.concat(person);
-    // response.json(person);
+    })
+    .catch(error => next(error));
 });
+
+// Error Handling
+app.use((error, request, response, next) => {
+    console.error(error.message);
+
+    if (error.name == "CastError") {
+        return response.status(400).send({ error: 'malformed id' });
+    }
+
+
+    return response.status(400).end();
+})
 
 // LISTENING
 app.listen(PORT, () => {
