@@ -45,16 +45,22 @@ app.get('/', (request, response) => {
     response.send("<h1>Phonebook API</h1>")
 });
 
-app.get('/info', (request, response) => {
-    const html = `
+app.get('/info', (request, response, next) => {
+    PhonebookEntry.countDocuments({}, (err, count) => {
+        if (err) {
+            next(err);
+        }
+        
+        const html = `
         <div>
-            Phonebook has info for ${persons.length} people.
+            Phonebook has info for ${count} people.
         </div>
         <div>
             ${new Date()}
         </div> 
-    `;
-    response.send(html);
+        `;
+        response.send(html);
+    });
 });
 
 
