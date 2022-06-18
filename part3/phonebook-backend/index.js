@@ -10,39 +10,6 @@ const PORT = process.env.PORT || 3001;
 const ID_MAX = Math.pow(2, 53);
 const app = express();
 
-// hardcoded database
-// let ids = [1, 2, 3, 4]; // ids to avoid clash
-// let persons = [
-//     { 
-//       "id": 1,
-//       "name": "Arto Hellas", 
-//       "number": "040-123456"
-//     },
-//     { 
-//       "id": 2,
-//       "name": "Ada Lovelace", 
-//       "number": "39-44-5323523"
-//     },
-//     { 
-//       "id": 3,
-//       "name": "Dan Abramov", 
-//       "number": "12-43-234345"
-//     },
-//     { 
-//       "id": 4,
-//       "name": "Mary Poppendieck", 
-//       "number": "39-23-6423122"
-//     }
-// ];
-
-// id generation
-/*const generateId = () => {
-    let id = Math.floor(Math.random() * ID_MAX);
-    while (ids.includes(id))
-        id = Math.floor(Math.random() * ID_MAX);
-    return id;
-}*/
-
 // for frontend
 app.use(express.static('build'));
 
@@ -123,19 +90,29 @@ app.post('/api/persons', (request, response) => {
         });
     }
 
-    if (persons.find(person => person.name === body.name)) { // person exists
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
+    const newPhonebookEntry = new PhonebookEntry({
         name: body.name,
-        number: body.number,
-        id: generateId()
-    }
-    persons = persons.concat(person);
-    response.json(person);
+        number: body.number
+    });
+
+    newPhonebookEntry.save().then(savedEntry => {
+        console.log(`New entry saved to DB: ${JSON.stringify(newPhonebookEntry)}`);
+        response.json(savedEntry);
+    });
+
+    // if (persons.find(person => person.name === body.name)) { // person exists
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    // }
+
+    // const person = {
+    //     name: body.name,
+    //     number: body.number,
+    //     id: generateId()
+    // }
+    // persons = persons.concat(person);
+    // response.json(person);
 });
 
 // LISTENING
