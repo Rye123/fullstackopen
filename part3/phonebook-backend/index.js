@@ -100,6 +100,11 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error));
 });
 
+// 404 Handling
+app.use((request, response) => {
+    response.status(404).end();
+})
+
 // Error Handling
 app.use((error, request, response, next) => {
     console.error(error.message);
